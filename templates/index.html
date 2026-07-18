@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinical AI Patient Registry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans antialiased text-slate-900">
+
+    <div class="max-w-[1600px] mx-auto p-6 space-y-6">
+        
+        <!-- Header Structure -->
+        <header class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">Dermatological Patient Database</h1>
+                <p class="text-sm text-slate-500">Clinical intake and automated AI pipeline diagnostic tracking platform</p>
+            </div>
+            
+            <!-- Real-time Database Search Interface Component -->
+            <form action="/" method="GET" class="flex gap-2 w-96">
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search by name or mobile..." 
+                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-slate-50">
+                <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm">
+                    Search
+                </button>
+                {% if search_query %}
+                    <a href="/" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition flex items-center">Clear</a>
+                {% endif %}
+            </form>
+        </header>
+
+        <main class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+            
+            <!-- Data Entry Container Panel -->
+            <section class="xl:col-span-1 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                <div class="border-b border-slate-200 bg-slate-50 p-4">
+                    <h2 class="text-lg font-bold text-slate-800">New Clinical Intake Form</h2>
+                </div>
+                
+                <form action="/add_patient/" method="POST" enctype="multipart/form-data" class="p-5 space-y-6 max-h-[75vh] overflow-y-auto text-xs">
+                    
+                    <!-- Section A: Demographic Foundation -->
+                    <fieldset class="space-y-3">
+                        <legend class="text-sm font-bold text-blue-700 border-b pb-1 w-full uppercase tracking-wider">1. Demographics</legend>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="first_name" placeholder="First Name *" required class="border p-2 rounded bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500">
+                            <input type="text" name="last_name" placeholder="Last Name *" required class="border p-2 rounded bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="reg_number" placeholder="Registration No." class="border p-2 rounded bg-slate-50">
+                            <input type="number" name="age" placeholder="Age" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select name="gender" class="border p-2 rounded bg-slate-50"><option value="">Gender</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
+                            <input type="text" name="blood_group" placeholder="Blood Group" class="border p-2 rounded bg-slate-50">
+                            <input type="date" name="dob" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="text" name="marital_status" placeholder="Marital Status" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="occupation" placeholder="Occupation" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="nationality" placeholder="Nationality" class="border p-2 rounded bg-slate-50">
+                        </div>
+                    </fieldset>
+
+                    <!-- Section B: Communication Records -->
+                    <fieldset class="space-y-3">
+                        <legend class="text-sm font-bold text-blue-700 border-b pb-1 w-full uppercase tracking-wider">2. Contact Details</legend>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="mobile_number" placeholder="Primary Mobile *" required class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="alt_mobile_number" placeholder="Alt Mobile" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <input type="email" name="email" placeholder="Email Address" class="w-full border p-2 rounded bg-slate-50">
+                        <input type="text" name="address" placeholder="Street Address" class="w-full border p-2 rounded bg-slate-50">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="city" placeholder="City" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="state" placeholder="State" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="country" placeholder="Country" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="pin_code" placeholder="PIN Code" class="border p-2 rounded bg-slate-50">
+                        </div>
+                    </fieldset>
+
+                    <!-- Section C: Patient Clinical Anamnesis -->
+                    <fieldset class="space-y-3">
+                        <legend class="text-sm font-bold text-blue-700 border-b pb-1 w-full uppercase tracking-wider">3. History & Systemic Conditions</legend>
+                        <textarea name="chief_complaint" placeholder="Chief Complaint" rows="2" class="w-full border p-2 rounded bg-slate-50"></textarea>
+                        <textarea name="present_illness" placeholder="History of Present Illness" rows="2" class="w-full border p-2 rounded bg-slate-50"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="prev_skin_diseases" placeholder="Previous Skin Diseases" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="other_medical_conditions" placeholder="Other Medical Conditions" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="prev_surgeries" placeholder="Previous Surgeries" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="current_medications" placeholder="Current Medications" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="drug_allergies" placeholder="Drug Allergies" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="food_allergies" placeholder="Food Allergies" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="family_hx_skin" placeholder="Family Skin Disease Hx" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="family_hx_cancer" placeholder="Family Cancer Hx" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select name="smoking_status" class="border p-2 rounded bg-slate-50"><option value="">Smoking Status</option><option value="Never">Never</option><option value="Former">Former</option><option value="Current">Current</option></select>
+                            <select name="alcohol_consumption" class="border p-2 rounded bg-slate-50"><option value="">Alcohol</option><option value="None">None</option><option value="Occasional">Occasional</option><option value="Heavy">Heavy</option></select>
+                            <input type="text" name="pregnancy_status" placeholder="Pregnancy Status" class="border p-2 rounded bg-slate-50">
+                        </div>
+                    </fieldset>
+
+                    <!-- Section D: Present Dermatological Manifestation -->
+                    <fieldset class="space-y-3">
+                        <legend class="text-sm font-bold text-blue-700 border-b pb-1 w-full uppercase tracking-wider">4. Skin Condition Specifics</legend>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="primary_condition" placeholder="Primary Skin Condition" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="body_part_affected" placeholder="Body Part Affected" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="date" name="date_of_onset" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="duration_disease" placeholder="Duration of Disease" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <input type="text" name="symptoms" placeholder="Symptoms (e.g., Itching, Pain, Burning)" class="w-full border p-2 rounded bg-slate-50">
+                        <textarea name="previous_treatment" placeholder="Previous Treatments Attempted" rows="1" class="w-full border p-2 rounded bg-slate-50"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="sun_exposure_history" placeholder="Sun Exposure Hx" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="cosmetic_product_usage" placeholder="Cosmetic Usage" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="occupational_exposure" placeholder="Occupational Exposure" class="border p-2 rounded bg-slate-50">
+                            <select name="fitzpatrick_skin_type" class="border p-2 rounded bg-slate-50"><option value="">Fitzpatrick Type</option><option value="Type I">Type I</option><option value="Type II">Type II</option><option value="Type III">Type III</option><option value="Type IV">Type IV</option><option value="Type V">Type V</option><option value="Type VI">Type VI</option></select>
+                        </div>
+                    </fieldset>
+
+                    <!-- Section E: Imaging Diagnostic Files -->
+                    <fieldset class="space-y-3">
+                        <legend class="text-sm font-bold text-blue-700 border-b pb-1 w-full uppercase tracking-wider">5. Imaging Assets</legend>
+                        <div class="bg-slate-50 p-2 border border-dashed border-slate-300 rounded">
+                            <label class="block font-medium text-slate-700 mb-1">Macro/Clinical Image</label>
+                            <input type="file" name="clinical_image" accept="image/*" class="w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                        <div class="bg-slate-50 p-2 border border-dashed border-slate-300 rounded">
+                            <label class="block font-medium text-slate-700 mb-1">Dermoscopic Image</label>
+                            <input type="file" name="dermoscopic_image" accept="image/*" class="w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                    </fieldset>
+
+                    <!-- Section F: Pipeline Automated Output -->
+                    <fieldset class="space-y-3">
+                        <legend class="text-sm font-bold text-blue-700 border-b pb-1 w-full uppercase tracking-wider">6. AI Processing & Visit Context</legend>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select name="ai_status" class="border p-2 rounded bg-slate-50"><option value="AI Pending">AI Pending</option><option value="AI Analyzed">AI Analyzed</option><option value="Failed">Failed</option></select>
+                            <input type="text" name="latest_ai_prediction" placeholder="AI Inference Output" class="border p-2 rounded bg-slate-50">
+                            <input type="number" step="0.01" name="confidence_score" placeholder="Conf. Score (0-1)" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select name="severity" class="border p-2 rounded bg-slate-50"><option value="Mild">Mild</option><option value="Moderate">Moderate</option><option value="Severe">Severe</option></select>
+                            <input type="text" name="disease_progress_status" placeholder="Progression Status" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex flex-col"><label class="text-[10px] text-slate-500 mb-0.5">Last Visit</label><input type="date" name="last_visit_date" class="border p-2 rounded bg-slate-50"></div>
+                            <div class="flex flex-col"><label class="text-[10px] text-slate-500 mb-0.5">Next Follow-up</label><input type="date" name="next_followup_date" class="border p-2 rounded bg-slate-50"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" name="total_visits" placeholder="Total Visits Count" value="1" class="border p-2 rounded bg-slate-50">
+                            <input type="text" name="assigned_doctor" placeholder="Assigned MD" class="border p-2 rounded bg-slate-50">
+                        </div>
+                        <textarea name="current_treatment_plan" placeholder="Current Treatment Execution Plan" rows="1" class="w-full border p-2 rounded bg-slate-50"></textarea>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select name="prescription_available" class="border p-2 rounded bg-slate-50"><option value="No">Rx Available? No</option><option value="Yes">Yes</option></select>
+                            <select name="report_generated" class="border p-2 rounded bg-slate-50"><option value="No">Report Out? No</option><option value="Yes">Yes</option></select>
+                            <select name="status" class="border p-2 rounded bg-slate-50"><option value="Active">Active Status</option><option value="Inactive">Inactive</option></select>
+                        </div>
+                    </fieldset>
+                    
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md text-sm">
+                        Commit Clinical Record
+                    </button>
+                </form>
+            </section>
+
+            <!-- Diagnostic Database View Pane -->
+            <section class="xl:col-span-2 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                <div class="border-b border-slate-200 bg-slate-50 p-4">
+                    <h2 class="text-lg font-bold text-slate-800">Dynamic Patient Workspace</h2>
+                </div>
+                
+                <div class="p-4 overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600 font-semibold uppercase tracking-wider border-b border-slate-200">
+                                <th class="p-3">Clinical Scan</th>
+                                <th class="p-3">Dermoscopic</th>
+                                <th class="p-3">Patient Identity & Contact</th>
+                                <th class="p-3">Primary Diagnosis</th>
+                                <th class="p-3">Assigned MD</th>
+                                <th class="p-3">AI Engine Metrics & Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for p in patients %}
+                            <tr class="hover:bg-slate-100 transition cursor-pointer" onclick="window.location.href='/patient/{{ p.id }}'">
+                                <!-- Clinical Image Output -->
+                                <td class="p-3">
+                                    {% if p.clinical_image_path %}
+                                        <a href="{{ p.clinical_image_path }}" target="_blank">
+                                            <img src="{{ p.clinical_image_path }}" class="w-14 h-14 object-cover rounded border shadow-sm hover:scale-105 transition duration-150">
+                                        </a>
+                                    {% else %}
+                                        <div class="w-14 h-14 bg-slate-100 border border-slate-200 rounded flex items-center justify-center text-[10px] text-slate-400 font-medium">No Image</div>
+                                    {% endif %}
+                                </td>
+                                <!-- Dermoscopic Image Output -->
+                                <td class="p-3">
+                                    {% if p.dermoscopic_image_path %}
+                                        <a href="{{ p.dermoscopic_image_path }}" target="_blank">
+                                            <img src="{{ p.dermoscopic_image_path }}" class="w-14 h-14 object-cover rounded border shadow-sm hover:scale-105 transition duration-150">
+                                        </a>
+                                    {% else %}
+                                        <div class="w-14 h-14 bg-slate-100 border border-slate-200 rounded flex items-center justify-center text-[10px] text-slate-400 font-medium">No Scan</div>
+                                    {% endif %}
+                                </td>
+                                <!-- Identity Data Layout -->
+                                <td class="p-3 whitespace-nowrap">
+                                    <div class="font-bold text-slate-900 text-sm">{{ p.first_name }} {{ p.last_name }}</div>
+                                    <div class="text-slate-500 mt-0.5">Reg: {{ p.reg_number or 'N/A' }} | Age: {{ p.age or 'N/A' }} | {{ p.gender }}</div>
+                                    <div class="text-blue-600 font-mono mt-0.5 font-medium">{{ p.mobile_number }}</div>
+                                </td>
+                                <!-- Medical Case Details -->
+                                <td class="p-3">
+                                    <div class="font-semibold text-slate-800">{{ p.primary_condition or 'Unspecified' }}</div>
+                                    <div class="text-slate-400 text-[10px] italic mt-0.5">Onset: {{ p.date_of_onset or 'Unknown' }}</div>
+                                    <div class="mt-1">
+                                        {% if p.severity == "Severe" %}
+                                            <span class="text-[10px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">{{ p.severity }}</span>
+                                        {% elif p.severity == "Moderate" %}
+                                            <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">{{ p.severity }}</span>
+                                        {% else %}
+                                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">{{ p.severity or 'Mild' }}</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <!-- Staff Field -->
+                                <td class="p-3 text-slate-700 font-medium whitespace-nowrap">
+                                    {{ p.assigned_doctor or 'Unassigned' }}
+                                </td>
+                                <!-- System Metrics Block -->
+                                <td class="p-3 whitespace-nowrap">
+                                    <div class="flex items-center gap-1.5">
+                                        {% if p.status == "Active" %}
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            <span class="text-emerald-700 font-bold">Active</span>
+                                        {% else %}
+                                            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                                            <span class="text-slate-500 font-bold">Inactive</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded mt-1.5 inline-block">{{ p.ai_status or 'AI Pending' }}</div>
+                                    {% if p.latest_ai_prediction %}
+                                        <div class="text-[10px] text-slate-600 mt-1">Pred: <span class="font-semibold text-slate-800">{{ p.latest_ai_prediction }}</span> ({{ (p.confidence_score * 100)|int if p.confidence_score else '0' }}%)</div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-slate-400 font-medium bg-slate-50/50">
+                                    No records match the current database view parameters.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

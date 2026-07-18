@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ patient.first_name }} {{ patient.last_name }} - Full Clinical Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans antialiased text-slate-900 p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Navigation & Header -->
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-slate-200 gap-4">
+            <div class="flex items-center gap-4">
+                <a href="/" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium transition text-sm whitespace-nowrap">
+                    &larr; Back to Registry
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800 flex items-center gap-3">
+                        {{ patient.first_name }} {{ patient.last_name }}
+                        {% if patient.status == "Active" %}
+                            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full border border-emerald-200 tracking-wide uppercase">Active</span>
+                        {% else %}
+                            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded-full border border-slate-300 tracking-wide uppercase">Inactive</span>
+                        {% endif %}
+                    </h1>
+                </div>
+            </div>
+            <div class="text-left md:text-right">
+                <div class="text-sm text-slate-500 font-medium">System UUID</div>
+                <div class="font-mono text-xs text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100 mt-1">{{ patient.id }}</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+            
+            <!-- LEFT COLUMN: Identity, Contact & Imaging -->
+            <div class="space-y-6 lg:sticky lg:top-6">
+                
+                <!-- Core Demographics -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 border-b pb-2 mb-3 text-xs uppercase tracking-wider">Demographics</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Reg No.</span> <span class="font-medium text-slate-800">{{ patient.reg_number or 'N/A' }}</span></div>
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Age / Gender</span> <span class="font-medium text-slate-800">{{ patient.age or '-' }} / {{ patient.gender or '-' }}</span></div>
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Date of Birth</span> <span class="font-medium text-slate-800">{{ patient.dob or 'N/A' }}</span></div>
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Blood Group</span> <span class="font-bold text-red-600">{{ patient.blood_group or 'N/A' }}</span></div>
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Marital Status</span> <span class="font-medium text-slate-800">{{ patient.marital_status or 'N/A' }}</span></div>
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Occupation</span> <span class="font-medium text-slate-800">{{ patient.occupation or 'N/A' }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">Nationality</span> <span class="font-medium text-slate-800">{{ patient.nationality or 'N/A' }}</span></div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 border-b pb-2 mb-3 text-xs uppercase tracking-wider">Contact & Location</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Primary Mobile</span> <span class="font-bold text-blue-600">{{ patient.mobile_number }}</span></div>
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Alt Mobile</span> <span class="font-medium text-slate-800">{{ patient.alt_mobile_number or 'N/A' }}</span></div>
+                        <div class="flex justify-between border-b border-slate-50 pb-1"><span class="text-slate-500">Email</span> <span class="font-medium text-slate-800">{{ patient.email or 'N/A' }}</span></div>
+                        <div class="pt-2">
+                            <span class="text-slate-500 block mb-1 text-xs">ADDRESS</span>
+                            <p class="font-medium text-slate-800 leading-tight">
+                                {{ patient.address or 'No street address' }}<br>
+                                {{ patient.city or '' }} {{ patient.state or '' }} {{ patient.pin_code or '' }}<br>
+                                {{ patient.country or '' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Imaging -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 border-b pb-2 mb-4 text-xs uppercase tracking-wider">Imaging Assets</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-500 block mb-1 uppercase">Macro / Clinical View</span>
+                            {% if patient.clinical_image_path %}
+                                <a href="{{ patient.clinical_image_path }}" target="_blank">
+                                    <img src="{{ patient.clinical_image_path }}" class="w-full h-48 object-cover rounded border border-slate-200 shadow-sm hover:opacity-90 transition">
+                                </a>
+                            {% else %}
+                                <div class="w-full h-24 bg-slate-50 rounded flex items-center justify-center text-xs text-slate-400 border border-dashed border-slate-300">No Clinical Image</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-500 block mb-1 uppercase">Dermoscopic Scan</span>
+                            {% if patient.dermoscopic_image_path %}
+                                <a href="{{ patient.dermoscopic_image_path }}" target="_blank">
+                                    <img src="{{ patient.dermoscopic_image_path }}" class="w-full h-48 object-cover rounded border border-slate-200 shadow-sm hover:opacity-90 transition">
+                                </a>
+                            {% else %}
+                                <div class="w-full h-24 bg-slate-50 rounded flex items-center justify-center text-xs text-slate-400 border border-dashed border-slate-300">No Dermoscopic Scan</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Clinical Data, AI & Pipeline -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Section 1: AI Diagnostics & Primary Condition -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-6 border-b md:border-b-0 md:border-r border-slate-200">
+                        <h3 class="font-bold text-slate-500 text-xs uppercase tracking-wider mb-2">Primary Diagnosis</h3>
+                        <div class="text-3xl font-black text-indigo-700 mb-2">{{ patient.primary_condition or 'Unspecified' }}</div>
+                        <div class="flex items-center gap-2 mb-4">
+                            {% if patient.severity == "Severe" %}
+                                <span class="text-xs font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded">{{ patient.severity }}</span>
+                            {% elif patient.severity == "Moderate" %}
+                                <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">{{ patient.severity }}</span>
+                            {% else %}
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">{{ patient.severity or 'Mild' }}</span>
+                            {% endif %}
+                            <span class="text-xs text-slate-500 font-medium">Onset: {{ patient.date_of_onset or 'Unknown' }}</span>
+                        </div>
+                        <div class="text-sm">
+                            <span class="text-slate-500 block text-[10px] font-bold uppercase mb-0.5">Progression Status</span>
+                            <span class="font-medium text-slate-800">{{ patient.disease_progress_status or 'Not evaluated' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 bg-slate-50/50">
+                        <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider mb-4 flex items-center justify-between">
+                            AI Inference Engine
+                            <span class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded font-bold border border-indigo-200">{{ patient.ai_status or 'Pending' }}</span>
+                        </h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="bg-white p-3 rounded border border-slate-200 shadow-sm">
+                                <span class="text-slate-500 block text-[10px] font-bold uppercase mb-0.5">Model Prediction</span>
+                                <span class="font-bold text-slate-900 text-base">{{ patient.latest_ai_prediction or 'Awaiting processing' }}</span>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-slate-200 shadow-sm flex justify-between items-center">
+                                <span class="text-slate-500 text-[10px] font-bold uppercase">Confidence Score</span>
+                                <span class="font-black text-indigo-600 text-lg">{{ (patient.confidence_score * 100)|int if patient.confidence_score else '0' }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Dermatological Specifics -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 border-b pb-2 mb-4 text-xs uppercase tracking-wider">Skin Condition Specifics</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-y-5 gap-x-4 text-sm">
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Body Part Affected</span><p class="font-medium text-slate-800">{{ patient.body_part_affected or 'N/A' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Duration</span><p class="font-medium text-slate-800">{{ patient.duration_disease or 'N/A' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Fitzpatrick Type</span><p class="font-medium text-slate-800">{{ patient.fitzpatrick_skin_type or 'N/A' }}</p></div>
+                        
+                        <div class="col-span-2 md:col-span-3"><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Presenting Symptoms</span><p class="font-medium text-slate-800 bg-slate-50 p-2 rounded border border-slate-100">{{ patient.symptoms or 'None recorded' }}</p></div>
+                        <div class="col-span-2 md:col-span-3"><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Previous Treatments</span><p class="font-medium text-slate-800 bg-slate-50 p-2 rounded border border-slate-100">{{ patient.previous_treatment or 'None' }}</p></div>
+                        
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Sun Exposure Hx</span><p class="font-medium text-slate-800">{{ patient.sun_exposure_history or 'N/A' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Cosmetic Usage</span><p class="font-medium text-slate-800">{{ patient.cosmetic_product_usage or 'N/A' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Occupational Exposure</span><p class="font-medium text-slate-800">{{ patient.occupational_exposure or 'N/A' }}</p></div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Comprehensive Anamnesis -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 border-b pb-2 mb-4 text-xs uppercase tracking-wider">Clinical History & Systemic Review</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-6 text-sm">
+                        
+                        <!-- Core Complaints -->
+                        <div class="md:col-span-2"><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Chief Complaint</span><p class="font-medium text-slate-800">{{ patient.chief_complaint or 'None recorded' }}</p></div>
+                        <div class="md:col-span-2"><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">History of Present Illness</span><p class="font-medium text-slate-800">{{ patient.present_illness or 'None recorded' }}</p></div>
+                        
+                        <div class="col-span-1 md:col-span-2 border-t border-slate-100 my-1"></div>
+                        
+                        <!-- Allergies & Meds -->
+                        <div class="bg-red-50/50 p-3 rounded border border-red-100"><span class="block text-red-800 text-[10px] font-bold mb-1 uppercase">Drug Allergies</span><p class="font-bold text-red-600">{{ patient.drug_allergies or 'No known allergies' }}</p></div>
+                        <div class="bg-amber-50/50 p-3 rounded border border-amber-100"><span class="block text-amber-800 text-[10px] font-bold mb-1 uppercase">Food Allergies</span><p class="font-bold text-amber-600">{{ patient.food_allergies or 'None' }}</p></div>
+                        <div class="md:col-span-2"><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Current Medications</span><p class="font-medium text-slate-800">{{ patient.current_medications or 'None' }}</p></div>
+                        
+                        <div class="col-span-1 md:col-span-2 border-t border-slate-100 my-1"></div>
+                        
+                        <!-- Medical History -->
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Previous Skin Diseases</span><p class="font-medium text-slate-800">{{ patient.prev_skin_diseases or 'None' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Other Medical Conditions</span><p class="font-medium text-slate-800">{{ patient.other_medical_conditions or 'None' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Previous Surgeries</span><p class="font-medium text-slate-800">{{ patient.prev_surgeries or 'None' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Family History</span><p class="font-medium text-slate-800">Skin: {{ patient.family_hx_skin or 'N/A' }} <br> Cancer: {{ patient.family_hx_cancer or 'N/A' }}</p></div>
+                        
+                        <div class="col-span-1 md:col-span-2 border-t border-slate-100 my-1"></div>
+                        
+                        <!-- Lifestyle -->
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Smoking Status</span><p class="font-medium text-slate-800">{{ patient.smoking_status or 'Unknown' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Alcohol Consumption</span><p class="font-medium text-slate-800">{{ patient.alcohol_consumption or 'Unknown' }}</p></div>
+                        <div><span class="block text-slate-500 text-[10px] font-bold mb-1 uppercase">Pregnancy Status</span><p class="font-medium text-slate-800">{{ patient.pregnancy_status or 'N/A' }}</p></div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Workflow & Case Management -->
+                <div class="bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-700 text-white">
+                    <h3 class="font-bold text-slate-300 border-b border-slate-600 pb-2 mb-4 text-xs uppercase tracking-wider">Case Management & Logistics</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-6">
+                        <div class="bg-slate-700/50 p-3 rounded">
+                            <span class="block text-slate-400 text-[10px] font-bold mb-1 uppercase">Assigned MD</span>
+                            <p class="font-medium text-white">{{ patient.assigned_doctor or 'Unassigned' }}</p>
+                        </div>
+                        <div class="bg-slate-700/50 p-3 rounded">
+                            <span class="block text-slate-400 text-[10px] font-bold mb-1 uppercase">Last Visit</span>
+                            <p class="font-medium text-white">{{ patient.last_visit_date or 'N/A' }}</p>
+                        </div>
+                        <div class="bg-slate-700/50 p-3 rounded">
+                            <span class="block text-slate-400 text-[10px] font-bold mb-1 uppercase">Next Follow-up</span>
+                            <p class="font-medium text-white">{{ patient.next_followup_date or 'N/A' }}</p>
+                        </div>
+                        <div class="bg-slate-700/50 p-3 rounded">
+                            <span class="block text-slate-400 text-[10px] font-bold mb-1 uppercase">Total Visits</span>
+                            <p class="font-medium text-white">{{ patient.total_visits or '0' }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <span class="block text-slate-400 text-[10px] font-bold mb-1 uppercase">Current Treatment Plan</span>
+                        <p class="font-medium text-slate-100 bg-slate-900/50 p-3 rounded border border-slate-700">{{ patient.current_treatment_plan or 'No active treatment plan recorded.' }}</p>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full {{ 'bg-emerald-400' if patient.prescription_available == 'Yes' else 'bg-slate-500' }}"></div>
+                            <span class="text-xs font-bold text-slate-300">Prescription Output</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full {{ 'bg-emerald-400' if patient.report_generated == 'Yes' else 'bg-slate-500' }}"></div>
+                            <span class="text-xs font-bold text-slate-300">Report Generated</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
